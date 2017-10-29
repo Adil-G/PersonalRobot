@@ -37,7 +37,7 @@ angular.module('starter', ['ionic'])
   })
   .controller('Talk', function($scope,$ionicPlatform,$state, $ionicLoading, $ionicPopup,$timeout, $http, $q) {
 
-    const CHATBOT_ID = '60401';
+    const CHATBOT_ID = '754';//'60401';
     function convertToSlug(Text)
     {
       return Text
@@ -60,6 +60,7 @@ angular.module('starter', ['ionic'])
      $http(req)
        .success(function (data, status, headers, config) {
          $scope.PostDataResponse = data;
+         data.message.message = data.message.message.replace(/[<>]/g, '');
          console.log(data.message.message);
          var hash = md5("318"+data.message.message+"mp3655689925862905831bbe60297db080c85d6b6df29fcf9");
          console.log(hash);
