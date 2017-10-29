@@ -88,24 +88,47 @@ angular.module('starter', ['ionic'])
        });
    };
     $scope.continue = false;
+    var recognition;
     $scope.recordMessage = function()
     {
-      var recognition = new (window.SpeechRecognition || window.webkitSpeechRecognition || window.mozSpeechRecognition || window.msSpeechRecognition)();
-      recognition.lang = 'en-US';
-      recognition.interimResults = false;
-      recognition.maxAlternatives = 5;
-      recognition.continuos = true;
-      recognition.start();
+      if (window.cordova) {
+        // running on device/emulator
+        recognition = new (window.SpeechRecognition || window.webkitSpeechRecognition || window.mozSpeechRecognition || window.msSpeechRecognition)();
+        recognition.lang = 'en-US';
+        recognition.interimResults = false;
+        recognition.maxAlternatives = 5;
+        recognition.continuos = true;
+        recognition.start();
 
-      recognition.onresult = function(event) {
-        console.log('You said: ', event.results[0][0].transcript);
-        $("#usermsg").val(event.results[0][0].transcript);
-        $scope.sendMessage();
-      };
+        recognition.onresult = function(event) {
+          console.log('You said: ', event.results[0][0].transcript);
+          $("#usermsg").val(event.results[0][0].transcript);
+          $scope.sendMessage();
+        };
 
-      recognition.onerror = function(e) {
-        setTimeout(function(){recognition.start();console.log("Error. Starting again.");}, 1000);
-      };
+        recognition.onerror = function(e) {
+          setTimeout(function(){recognition.start();console.log("Error. Starting again.");}, 1000);
+        };
+      } else {
+        // running in dev mode
+        recognition = new SpeechRecognition();
+        recognition.lang = 'en-US';
+        recognition.interimResults = false;
+        recognition.maxAlternatives = 5;
+        recognition.continuos = true;
+        recognition.start();
+
+        recognition.onresult = function(event) {
+          console.log('You said: ', event.results[0][0].transcript);
+          $("#usermsg").val(event.results[0][0].transcript);
+          $scope.sendMessage();
+        };
+
+        recognition.onerror = function(e) {
+          setTimeout(function(){recognition.start();console.log("Error. Starting again.");}, 1000);
+        };
+      }
+
 
     };
   });

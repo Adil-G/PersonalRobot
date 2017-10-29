@@ -3,7 +3,8 @@
   "app_id": "08ad98bd",
   "type": "ionic1",
   "integrations": {
-    "gulp": {}
+    "gulp": {},
+    "cordova": {}
   },
   "watchPatterns": [
     "scss/**/*"
