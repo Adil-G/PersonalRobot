@@ -93,7 +93,7 @@ angular.module('starter', ['ionic'])
     {
       if (window.cordova) {
         // running on device/emulator
-        recognition = new (window.SpeechRecognition || window.webkitSpeechRecognition || window.mozSpeechRecognition || window.msSpeechRecognition)();
+        recognition = new SpeechRecognition();
         recognition.lang = 'en-US';
         recognition.interimResults = false;
         recognition.maxAlternatives = 5;
@@ -111,7 +111,7 @@ angular.module('starter', ['ionic'])
         };
       } else {
         // running in dev mode
-        recognition = new SpeechRecognition();
+        recognition = new (window.SpeechRecognition || window.webkitSpeechRecognition || window.mozSpeechRecognition || window.msSpeechRecognition)();
         recognition.lang = 'en-US';
         recognition.interimResults = false;
         recognition.maxAlternatives = 5;
