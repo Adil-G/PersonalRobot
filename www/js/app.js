@@ -104,6 +104,100 @@ angular.module('starter', ['ionic'])
    };
     $scope.continue = false;
     var recognition;
+    //Only cacluate number types
+    function calculate(schema1,schema2) {
+      var ret = {};
+      for (var key in schema1) {
+        if (schema1.hasOwnProperty(key) && schema2.hasOwnProperty(key)) {
+          var obj = schema1[key];
+          var obj2 = schema2[key];
+          if(typeof obj === "number" && !isNaN(obj) && typeof obj2 === "number" && !isNaN(obj2)) {
+            ret[key] = obj+obj2;
+          }
+          else {
+            if(typeof obj === 'object' && typeof obj2 === 'object') {
+              ret[key] = calculate(obj,obj2);
+            }
+            else {
+              ret[key] = obj;
+            }
+          }
+        }
+      }
+      return ret;
+    }
+    function distance(schema1,schema2) {
+      var ret = {};
+      for (var key in schema1) {
+        if (schema1.hasOwnProperty(key) && schema2.hasOwnProperty(key)) {
+          var obj = schema1[key];
+          var obj2 = schema2[key];
+          if(typeof obj === "number" && !isNaN(obj) && typeof obj2 === "number" && !isNaN(obj2)) {
+            ret[key] = obj-obj2;
+          }
+          else {
+            if(typeof obj === 'object' && typeof obj2 === 'object') {
+              ret[key] = calculate(obj,obj2);
+            }
+            else {
+              ret[key] = obj;
+            }
+          }
+        }
+      }
+      return ret;
+    }
+    $scope.readPage = function(input){
+      var req = {
+        method: 'GET',
+        url: 'http://transcripts.foreverdreaming.org/viewtopic.php?f=104&t=31211',
+        headers: {
+          'Content-Type': "text/html"
+        }
+      };
+
+      $http(req)
+        .success(function (data, status, headers, config) {
+          var convos = [];
+          var ps = $(data).find('p');
+          for(var i =0 ;i < ps.length -1; i++)
+          {
+            var QA = {
+              q: $(ps[i]).text(),
+              a: $(ps[i+1]).text()
+            };
+            convos.push(QA);
+          }
+          console.log(convos);
+
+          var centroid = $scope.getAnnotation(input);
+          var best_QA = {};
+          for(var j = 0; j< convos.length;j++)
+          {
+            var dist  = distance(centroid, convos.q);
+            if(best_QA.dist)
+            {
+              if(dist <= best_QA.dist)
+              {
+                best_QA = {
+                  QA: convos,
+                  dist: dist
+                }
+              }
+
+            }else {
+              best_QA = {
+                QA: convos,
+                dist: dist
+              }
+          }
+          }
+          console.log("BEST QA:");
+          console.log(best_QA);
+
+        });
+
+    };
     $scope.getAnnotation = function(text)
     {
       if(!text)
@@ -135,7 +229,12 @@ angular.module('starter', ['ionic'])
         .success(function (nlp, status, headers, config) {
           $scope.PostDataResponse = nlp;
           console.log(nlp);
-          var name = nlp.sentences[0].text.content;
+
+          var name = '';
+          for(var i = 0; i < nlp.sentences.length; i++)
+          {
+            name += ' ' + nlp.sentences[i].text.content;
+          }
           var array = [];
           for(var i = 0; i < nlp.tokens.length; i++)
           {
@@ -330,11 +429,24 @@ angular.module('starter', ['ionic'])
           }
 
           console.log(array);
-          $("#analyze").html(JSON.stringify(array));
+          var normal = {};
+          if(array.length > 0)
+            normal = array[0];
+          for(var j =1;j< array.length;j++)
+          {
+            normal = calculate(normal,array[j]);
+          }
+          var newValue = {
+            'text': name,
+            'values': normal
+          };
+          console.log(newValue);
+          //$("#analyze").html(JSON.stringify(array));
           /*if(lang!="en")
            {
            $scope.gTranslate(data, "en");
            }*/
+          return newValue;
         })
         .error(function (data, status, header, config) {
           $scope.ResponseDetails = "Data: " + data +
@@ -347,7 +459,7 @@ angular.module('starter', ['ionic'])
 
     };
 
-
+    $scope.readPage();
     $scope.recordMessage = function()
     {
       if (window.cordova) {
