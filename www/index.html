@@ -60,9 +60,10 @@
             <img src="img/girl4.jpg" width="auto" height="100%"/>
           </div>
 
-          <input name="usermsg" type="text" id="usermsg" size="63" my-enter="sendMessage();"/>
-          <button name="submitmsg"   id="submitmsg" ng-click="sendMessage();" value="Send" class="fa fa-send-o"style="font-size:48px;color:red"></button>
+          <input name="usermsg" type="text" id="usermsg" size="63" my-enter="getAnnotation();"/>
+          <button name="submitmsg"   id="submitmsg" ng-click="getAnnotation();" value="Send" class="fa fa-send-o"style="font-size:48px;color:red"></button>
           <button name="recordmsg"    id="recordmsg" ng-click="recordMessage();" value="Record"class="fa fa-microphone" style="font-size:48px;color:red"></button>
+          <div id="analyze"></div>
         </div>
 
         <script type="text/javascript">

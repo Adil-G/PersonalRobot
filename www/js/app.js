@@ -37,7 +37,7 @@ angular.module('starter', ['ionic'])
   })
   .controller('Talk', function($scope,$ionicPlatform,$state, $ionicLoading, $ionicPopup,$timeout, $http, $q) {
 
-    const CHATBOT_ID = '754';//'60401';
+    const CHATBOT_ID = '754';//'754';60401
     function convertToSlug(Text)
     {
       return Text
@@ -62,10 +62,24 @@ angular.module('starter', ['ionic'])
          $scope.PostDataResponse = data;
          data.message.message = data.message.message.replace(/[<>]/g, '');
          console.log(data.message.message);
-         var hash = md5("318"+data.message.message+"mp3655689925862905831bbe60297db080c85d6b6df29fcf9");
+        /**
+         * Bridget
+         *
+         *var hash = md5("318"+data.message.message+"mp3655689925862905831bbe60297db080c85d6b6df29fcf9");
          console.log(hash);
          var url = 'http://www.vocalware.com/tts/gen.php?EID=3&LID=1&VID=8&TXT='+data.message.message+'&EXT=mp3&FX_TYPE=&FX_LEVEL=&ACC=6556899&API=2586290&SESSION=&HTTP_ERR=&CS='+hash;
+        */
 
+         /**
+          * Misaki
+          *
+          *
+          *
+
+          */
+         var hash = md5("3123"+data.message.message+"mp3655689925862905831bbe60297db080c85d6b6df29fcf9");
+         console.log(hash);
+         var url = 'http://www.vocalware.com/tts/gen.php?EID=3&LID=12&VID=3&TXT='+data.message.message+'&EXT=mp3&FX_TYPE=&FX_LEVEL=&ACC=6556899&API=2586290&SESSION=&HTTP_ERR=&CS='+hash;
          req.url = url;
          console.log(url);
         // $.fileDownload(url)
@@ -90,12 +104,62 @@ angular.module('starter', ['ionic'])
    };
     $scope.continue = false;
     var recognition;
+    $scope.getAnnotation = function(text)
+    {
+      if(!text)
+        text = $("#usermsg").val();
+      var headers = {
+        'Access-Control-Allow-Origin': '*',
+        'Access-Control-Allow-Origin': 'http://localhost:8101',
+        'Access-Control-Allow-Methods': 'POST, GET, OPTIONS, PUT',
+        'Content-Type': 'application/json',
+        'Accept': 'text/html'
+      };
+      //var data = $.param({"text":phrase,"lang":lang}
+      //);
+
+      var config = {
+        headers : {
+          'Content-Type': 'text/html'
+        }
+      };
+      var req = {
+        method: 'POST',
+        url: 'https://infinite-river-38310.herokuapp.com/',
+        headers: {
+          'Content-Type': "application/json"
+        },
+        data: {"text":text,"lang":"en"}
+      };
+      $http(req)
+        .success(function (data, status, headers, config) {
+          $scope.PostDataResponse = data;
+          var info = data;
+          console.log(info);
+          //$("#analyze").html(JSON.stringify(info));
+          /*if(lang!="en")
+           {
+           $scope.gTranslate(data, "en");
+           }*/
+        })
+        .error(function (data, status, header, config) {
+          $scope.ResponseDetails = "Data: " + data +
+            "<hr />status: " + status +
+            "<hr />headers: " + header +
+            "<hr />config: " + config;
+          console.log($scope.ResponseDetails);
+
+        });
+
+    };
+
+
     $scope.recordMessage = function()
     {
       if (window.cordova) {
         // running on device/emulator
         recognition = new SpeechRecognition();
-        recognition.lang = 'en-US';
+        recognition.lang = 'en-US';//ja-JP
         recognition.interimResults = false;
         recognition.maxAlternatives = 5;
         recognition.continuos = true;
@@ -104,7 +168,8 @@ angular.module('starter', ['ionic'])
         recognition.onresult = function(event) {
           console.log('You said: ', event.results[0][0].transcript);
           $("#usermsg").val(event.results[0][0].transcript);
-          $scope.sendMessage();
+          $scope.getAnnotation(event.results[0][0].transcript);
+          //$scope.sendMessage();
         };
 
         recognition.onerror = function(e) {
@@ -122,7 +187,8 @@ angular.module('starter', ['ionic'])
         recognition.onresult = function(event) {
           console.log('You said: ', event.results[0][0].transcript);
           $("#usermsg").val(event.results[0][0].transcript);
-          $scope.sendMessage();
+          $scope.getAnnotation(event.results[0][0].transcript);
+          //$scope.sendMessage();
         };
 
         recognition.onerror = function(e) {
