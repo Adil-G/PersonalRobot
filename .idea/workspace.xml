@@ -2,7 +2,6 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="92632eec-203b-4b16-a6cd-25b21869e8cf" name="Default" comment="">
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/www/index.html" afterPath="$PROJECT_DIR$/www/index.html" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/www/js/app.js" afterPath="$PROJECT_DIR$/www/js/app.js" />
     </list>
     <ignored path="myApp.iws" />
@@ -27,8 +26,8 @@
       <file leaf-file-name="app.js" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/www/js/app.js">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.33295965">
-              <caret line="279" column="35" selection-start-line="279" selection-start-column="35" selection-end-line="279" selection-end-column="35" />
+            <state vertical-scroll-proportion="0.41928253">
+              <caret line="534" column="46" selection-start-line="534" selection-start-column="46" selection-end-line="534" selection-end-column="46" />
               <folding />
             </state>
           </provider>
@@ -687,8 +686,8 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/www/js/app.js">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.33295965">
-          <caret line="279" column="35" selection-start-line="279" selection-start-column="35" selection-end-line="279" selection-end-column="35" />
+        <state vertical-scroll-proportion="0.41928253">
+          <caret line="534" column="46" selection-start-line="534" selection-start-column="46" selection-end-line="534" selection-end-column="46" />
           <folding />
         </state>
       </provider>

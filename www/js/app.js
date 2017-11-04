@@ -49,58 +49,39 @@ angular.module('starter', ['ionic'])
 
 
 
-   $scope.sendMessage = function () {
-     var req = {
-       method: 'POST',
-       url: 'https://www.personalityforge.com/api/chat/?apiKey=HUMaqFTuSmD6MJwj&chatBotID='+CHATBOT_ID+'&message='+convertToSlug($("#usermsg").val())+'&externalID=3sdf94skdlfjv3&firstName=corpius4&lastName=Blank&gender=m',
-       headers: {
-         'Content-Type': "application/json"
-       }
-     };
-     $http(req)
-       .success(function (data, status, headers, config) {
-         $scope.PostDataResponse = data;
-         data.message.message = data.message.message.replace(/[<>]/g, '');
-         console.log(data.message.message);
-        /**
-         * Bridget
-         *
-         *var hash = md5("318"+data.message.message+"mp3655689925862905831bbe60297db080c85d6b6df29fcf9");
-         console.log(hash);
-         var url = 'http://www.vocalware.com/tts/gen.php?EID=3&LID=1&VID=8&TXT='+data.message.message+'&EXT=mp3&FX_TYPE=&FX_LEVEL=&ACC=6556899&API=2586290&SESSION=&HTTP_ERR=&CS='+hash;
-        */
+   $scope.sendMessage = function (banter) {
 
-         /**
-          * Misaki
-          *
-          *
-          *
+     banter = banter.replace(/[<>]/g, '');
+     console.log(banter);
+     /**
+      * Bridget
+      *
+      *
+      */
+     var hash = md5("318"+banter+"mp3655689925862905831bbe60297db080c85d6b6df29fcf9");
+     console.log(hash);
+     var url = 'http://www.vocalware.com/tts/gen.php?EID=3&LID=1&VID=8&TXT='+banter+'&EXT=mp3&FX_TYPE=&FX_LEVEL=&ACC=6556899&API=2586290&SESSION=&HTTP_ERR=&CS='+hash;
+     /**
+      * Misaki
+      *
+      *var hash = md5("3123"+banter+"mp3655689925862905831bbe60297db080c85d6b6df29fcf9");
+      console.log(hash);
+      var url = 'http://www.vocalware.com/tts/gen.php?EID=3&LID=12&VID=3&TXT='+banter+'&EXT=mp3&FX_TYPE=&FX_LEVEL=&ACC=6556899&API=2586290&SESSION=&HTTP_ERR=&CS='+hash;
+      *
 
-          */
-         var hash = md5("3123"+data.message.message+"mp3655689925862905831bbe60297db080c85d6b6df29fcf9");
-         console.log(hash);
-         var url = 'http://www.vocalware.com/tts/gen.php?EID=3&LID=12&VID=3&TXT='+data.message.message+'&EXT=mp3&FX_TYPE=&FX_LEVEL=&ACC=6556899&API=2586290&SESSION=&HTTP_ERR=&CS='+hash;
-         req.url = url;
-         console.log(url);
-        // $.fileDownload(url)
-         // .done(function () { console.log('File download a success!'); })
-          //.fail(function () { console.log('File download failed!'); });
+      */
 
-         //sayText(data.message.message,3,1,3);
-         var audio = new Audio(url);
-         audio.addEventListener("ended", function(){
-           $scope.recordMessage();
-         });
-         audio.play()
+     console.log(url);
+     // $.fileDownload(url)
+     // .done(function () { console.log('File download a success!'); })
+     //.fail(function () { console.log('File download failed!'); });
 
-       })
-       .error(function (data, status, header, config) {
-         $scope.ResponseDetails = "Data: " + data +
-           "<hr />status: " + status +
-           "<hr />headers: " + header +
-           "<hr />config: " + config;
-         console.log($scope.ResponseDetails);
-       });
+     //sayText(banter,3,1,3);
+     var audio = new Audio(url);
+     audio.addEventListener("ended", function(){
+       $scope.recordMessage();
+     });
+     audio.play()
    };
     $scope.continue = false;
     var recognition;
@@ -254,7 +235,8 @@ angular.module('starter', ['ionic'])
     $scope.readPage = function(input){
       var req = {
         method: 'GET',
-        url: 'http://transcripts.foreverdreaming.org/viewtopic.php?f=104&t=31211',
+       // url: 'http://transcripts.foreverdreaming.org/viewtopic.php?f=104&t=31211',
+        url: 'http://transcripts.foreverdreaming.org/viewtopic.php?f=464&t=22993',
         headers: {
           'Content-Type': "text/html"
         }
@@ -283,7 +265,7 @@ angular.module('starter', ['ionic'])
               else{
 
               }//  ..  setTimeout()
-            }, 0)
+            }, 10)
           }
 
           myLoop();                      //  start the loop
@@ -361,8 +343,9 @@ angular.module('starter', ['ionic'])
 
 
     };
-    $scope.trunc = function(dataset, info)
+    $scope.trunc = function(dataset, nlp)
     {
+      var info = nlp.tokens[i];
       // Dummy
       //dataset.tag  = +(info.partOfSpeech.tag  == 'tag');
       // Text
@@ -549,6 +532,7 @@ angular.module('starter', ['ionic'])
       dataset.NCOMP   = +(info.dependencyEdge.label  == 'NCOMP');
 
       dataset.TEXT.push(info.lemma.toLowerCase());
+      dataset.SENT = nlp.sentiment.score * 10;
     };
     $scope.getAnnotationInput = function(text)
     {
@@ -591,12 +575,12 @@ angular.module('starter', ['ionic'])
           var array = [];
           for(var i = 0; i < nlp.tokens.length; i++)
           {
-            var info = nlp.tokens[i];
+
             var dataset = {
               TEXT:[]
             };
 
-            $scope.trunc(dataset, info);
+            $scope.trunc(dataset, nlp);
             array.push(dataset);
           }
 
@@ -650,6 +634,7 @@ angular.module('starter', ['ionic'])
                 console.log(best_QA);
                 console.log(best_QA.QA.q.text);
                 console.log(best_QA.QA.a);
+                $scope.sendMessage(best_QA.QA.a);
               }
             }, 0)
           }
@@ -716,11 +701,10 @@ angular.module('starter', ['ionic'])
           var array = [];
           for(var i = 0; i < nlp.tokens.length; i++)
           {
-            var info = nlp.tokens[i];
             var dataset = {
               TEXT: []
             };
-            $scope.trunc(dataset, info);
+            $scope.trunc(dataset, nlp);
 
             array.push(dataset);
           }
