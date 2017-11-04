@@ -175,7 +175,7 @@ angular.module('starter', ['ionic'])
           var obj = schema1[key];
           var obj2 = schema2[key];
           if(typeof obj === "number" && !isNaN(obj) && typeof obj2 === "number" && !isNaN(obj2)) {
-            if(Math.abs(schema1['SENT'] - schema2['SENT']) < 0.3)
+            //if(Math.abs(schema1['SENT'] - schema2['SENT']) < 0.7)
               ret[key] = Math.abs(obj-obj2);
           }
           /*
@@ -266,7 +266,7 @@ angular.module('starter', ['ionic'])
               else{
 
               }//  ..  setTimeout()
-            }, 10)
+            }, 100)
           }
 
           myLoop();                      //  start the loop
@@ -533,7 +533,7 @@ angular.module('starter', ['ionic'])
       dataset.NCOMP   = +(info.dependencyEdge.label  == 'NCOMP');
 
       dataset.TEXT.push(info.lemma.toLowerCase());
-      dataset.SENT = nlp.sentiment.score * 1;
+      dataset.SENT = nlp.documentSentiment.score * 10;
     };
     $scope.getAnnotationInput = function(text)
     {
