@@ -175,7 +175,8 @@ angular.module('starter', ['ionic'])
           var obj = schema1[key];
           var obj2 = schema2[key];
           if(typeof obj === "number" && !isNaN(obj) && typeof obj2 === "number" && !isNaN(obj2)) {
-            ret[key] = Math.abs(obj-obj2);
+            if(Math.abs(schema1['SENT'] - schema2['SENT']) < 0.3)
+              ret[key] = Math.abs(obj-obj2);
           }
           /*
           else if( key == 'TEXT' && Array.isArray(obj) && Array.isArray(obj2))
@@ -343,9 +344,9 @@ angular.module('starter', ['ionic'])
 
 
     };
-    $scope.trunc = function(dataset, nlp)
+    $scope.trunc = function(dataset, nlp, index)
     {
-      var info = nlp.tokens[i];
+      var info = nlp.tokens[index];
       // Dummy
       //dataset.tag  = +(info.partOfSpeech.tag  == 'tag');
       // Text
@@ -532,7 +533,7 @@ angular.module('starter', ['ionic'])
       dataset.NCOMP   = +(info.dependencyEdge.label  == 'NCOMP');
 
       dataset.TEXT.push(info.lemma.toLowerCase());
-      dataset.SENT = nlp.sentiment.score * 10;
+      dataset.SENT = nlp.sentiment.score * 1;
     };
     $scope.getAnnotationInput = function(text)
     {
@@ -580,7 +581,7 @@ angular.module('starter', ['ionic'])
               TEXT:[]
             };
 
-            $scope.trunc(dataset, nlp);
+            $scope.trunc(dataset, nlp, i);
             array.push(dataset);
           }
 
@@ -704,7 +705,7 @@ angular.module('starter', ['ionic'])
             var dataset = {
               TEXT: []
             };
-            $scope.trunc(dataset, nlp);
+            $scope.trunc(dataset, nlp, i);
 
             array.push(dataset);
           }
