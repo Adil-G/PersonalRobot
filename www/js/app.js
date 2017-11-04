@@ -236,8 +236,9 @@ angular.module('starter', ['ionic'])
     $scope.readPage = function(input){
       var req = {
         method: 'GET',
+        url: 'http://transcripts.foreverdreaming.org/viewtopic.php?f=188&t=22705',
        // url: 'http://transcripts.foreverdreaming.org/viewtopic.php?f=104&t=31211',
-        url: 'http://transcripts.foreverdreaming.org/viewtopic.php?f=464&t=22993',
+       // url: 'http://transcripts.foreverdreaming.org/viewtopic.php?f=464&t=22993',
         headers: {
           'Content-Type': "text/html"
         }
