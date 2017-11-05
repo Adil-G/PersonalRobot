@@ -124,6 +124,8 @@ angular.module('starter', ['ionic'])
      *    n = MIN(a.length(), b.length())
      */
     function intersect_safe(a, b) {
+      if(!a||!b)
+        return 1000;
       var ai = 0, bi = 0;
       var result = [];
       /*console.log(a);
@@ -196,7 +198,7 @@ angular.module('starter', ['ionic'])
            */
           else {
             if(typeof obj === 'object' && typeof obj2 === 'object') {
-              ret[key] = calculate(obj,obj2);
+              ret[key] = distance(obj,obj2);
             }
             else {
               ret[key] = obj;
@@ -236,9 +238,9 @@ angular.module('starter', ['ionic'])
     $scope.readPage = function(input){
       var req = {
         method: 'GET',
-        url: 'http://transcripts.foreverdreaming.org/viewtopic.php?f=188&t=22705',
        // url: 'http://transcripts.foreverdreaming.org/viewtopic.php?f=104&t=31211',
-       // url: 'http://transcripts.foreverdreaming.org/viewtopic.php?f=464&t=22993',
+       // url: 'http://transcripts.foreverdreaming.org/viewtopic.php?f=428&t=20911',
+        url:'templates/transcript.html',
         headers: {
           'Content-Type': "text/html"
         }
